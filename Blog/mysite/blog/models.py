@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from taggit.managers import TaggableManager
 
 
 class PublishedManager(models.Manager):
@@ -37,6 +38,7 @@ class Post(models.Model):
     )
     objects = models.Manager()
     published = PublishedManager()
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['-publish']
@@ -73,12 +75,11 @@ class Comment(models.Model):
     active = models.BooleanField(default=True)
 
     class Meta:
-
         ordering = ['created']
+
     indexes = [
         models.Index(fields=['created']),
     ]
 
     def __str__(self):
-
         return f'Comment by {self.name} on {self.post}'
